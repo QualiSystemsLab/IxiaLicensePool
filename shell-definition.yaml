@@ -1,0 +1,52 @@
+tosca_definitions_version: tosca_simple_yaml_1_0
+
+metadata:
+  template_name: IxiaLicensePool
+  template_author: Quali
+  template_version: 0.1.0
+  template_icon: shell-icon.png
+
+description: >
+  TOSCA based resource shell
+
+imports:
+  - cloudshell_standard: cloudshell_resource_standard_2_0_3.yaml
+
+node_types:
+
+  vendor.resource.Ixia License Pool:
+    derived_from: cloudshell.nodes.GenericResource
+    properties:
+      Available Licenses:
+        type: integer          # optional values: string, integer, float, boolean, cloudshell.datatypes.Password
+        default: 2
+        description: How many licenses are available for use
+        tags: [configuration]
+      ResourcePort.Application:
+        type: string          # optional values: string, integer, float, boolean, cloudshell.datatypes.Password
+        description: The type of application this license covers
+        tags: [configuration, abstract_filter]
+    capabilities:
+      auto_discovery_capability:
+        type: cloudshell.capabilities.AutoDiscovery
+        properties:        
+          enable_auto_discovery:
+            type: boolean
+            default: true
+          auto_discovery_description:
+            type: string
+            default: Creates licenses sub resources according to the Available Licenses attribute
+          inventory_description:
+            type: string
+            default: Ixia Licenses Pool, holds the available licenses.
+          Available Licenses:
+            type: integer
+            default: 2
+
+    artifacts:
+      icon:
+        file: shell-icon.png
+        type: tosca.artifacts.File
+      driver:
+        file: IxialicensepoolDriver.zip
+        type: tosca.artifacts.File
